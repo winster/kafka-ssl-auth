@@ -1,0 +1,36 @@
+custom.ssl: false
+spring:
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9093
+      group-id: group_id
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      security.protocol: SSL
+      ssl:
+        protocol: TLSv1.2
+        key-store-location: classpath:kafka.client.keystore.jks
+        key-store-type: jks
+        key-store-password: <password>
+        key-password: <password>
+        trust-store-location: classpath:kafka.client.truststore.jks
+        trust-store-type: jks
+        trust-store-password: <password>
+    producer:
+      bootstrap-servers: localhost:9093
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      security.protocol: SSL
+      ssl:
+        protocol: TLSv1.2
+        key-store-location: classpath:kafka.client.keystore.jks
+        key-store-type: jks
+        key-store-password: <password>
+        key-password: <password>
+        trust-store-location: classpath:kafka.client.truststore.jks
+        trust-store-type: jks
+        trust-store-password: <password>
+    properties:
+      #Server host name verification is disabled by setting ssl.endpoint.identification.algorithm to an empty string
+      ssl.endpoint.identification.algorithm:

@@ -1,0 +1,6 @@
+custom.ssl: true
+spring:
+  kafka:
+    properties:
+      #Server host name verification is disabled by setting ssl.endpoint.identification.algorithm to an empty string
+      ssl.endpoint.identification.algorithm:
