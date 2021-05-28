@@ -12,11 +12,11 @@ spring:
         protocol: TLSv1.2
         key-store-location: classpath:kafka.client.keystore.jks
         key-store-type: jks
-        key-store-password: <password>
-        key-password: <password>
+        key-store-password: 123456
+        key-password: 123456
         trust-store-location: classpath:kafka.client.truststore.jks
         trust-store-type: jks
-        trust-store-password: <password>
+        trust-store-password: 123456
     producer:
       bootstrap-servers: localhost:9093
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -26,11 +26,11 @@ spring:
         protocol: TLSv1.2
         key-store-location: classpath:kafka.client.keystore.jks
         key-store-type: jks
-        key-store-password: <password>
-        key-password: <password>
+        key-store-password: 123456
+        key-password: 123456
         trust-store-location: classpath:kafka.client.truststore.jks
         trust-store-type: jks
-        trust-store-password: <password>
+        trust-store-password: 123456
     properties:
       #Server host name verification is disabled by setting ssl.endpoint.identification.algorithm to an empty string
       ssl.endpoint.identification.algorithm:

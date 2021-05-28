@@ -47,11 +47,11 @@ public class KafkaConfig {
     producerConfig.put(SslConfigs.SSL_PROTOCOL_CONFIG, "TLSv1.2");
     producerConfig.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, clientKeystoreFile.getFile().getAbsolutePath());
     producerConfig.put(SslConfigs.SSL_KEYSTORE_TYPE_CONFIG, "jks");
-    producerConfig.put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, "<password>");
-    producerConfig.put(SslConfigs.SSL_KEY_PASSWORD_CONFIG, "<password>");
+    producerConfig.put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, "123456");
+    producerConfig.put(SslConfigs.SSL_KEY_PASSWORD_CONFIG, "123456");
     producerConfig.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, clientTruststoreFile.getFile().getAbsolutePath());
     producerConfig.put(SslConfigs.SSL_TRUSTSTORE_TYPE_CONFIG, "jks");
-    producerConfig.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, "<password>");
+    producerConfig.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, "123456");
 
     return producerConfig;
   }
