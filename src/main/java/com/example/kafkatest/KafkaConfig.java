@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.Resource;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
@@ -26,33 +25,44 @@ import org.springframework.kafka.core.ProducerFactory;
 @ConditionalOnProperty(value = "custom.ssl", havingValue = "true")
 public class KafkaConfig {
 
-  @Value("classpath:kafka.client.keystore.jks")
-  Resource clientKeystoreFile;
+  @Value("${kafka.ssl.keystore.location}")
+  String keystoreLocation;
 
-  @Value("classpath:kafka.client.truststore.jks")
-  Resource clientTruststoreFile;
+  @Value("${kafka.ssl.keystore.pwd}")
+  String keystoreKeyPwd;
+
+  @Value("${kafka.ssl.truststore.location}")
+  String truststoreLocation;
+
+  @Value("${kafka.producer.bootstrap-server}")
+  String producerBootstrapServer;
+
+  @Value("${kafka.consumer.bootstrap-server}")
+  String consumerBootstrapServer;
+
+  @Value("${kafka.producer.topic}")
+  String producerTopic;
+
+  @Value("${kafka.consumer.topic}")
+  String consumerTopic;
 
   @Autowired
   private ProducerFactory<Integer, String> producerFactory;
   @Autowired
   private ConsumerFactory<Integer, String> consumerFactory;
 
-  public Map<String, Object> producerConfig() throws IOException {
+  public Map<String, Object> producerConfig() {
     Map<String, Object> producerConfig = new HashMap<>(producerFactory.getConfigurationProperties());
-    producerConfig.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9093");
+    producerConfig.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, producerBootstrapServer);
     producerConfig.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
     producerConfig.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
     producerConfig.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SSL");
 
-    producerConfig.put(SslConfigs.SSL_PROTOCOL_CONFIG, "TLSv1.2");
-    producerConfig.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, clientKeystoreFile.getFile().getAbsolutePath());
-    producerConfig.put(SslConfigs.SSL_KEYSTORE_TYPE_CONFIG, "jks");
-    producerConfig.put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, "123456");
-    producerConfig.put(SslConfigs.SSL_KEY_PASSWORD_CONFIG, "123456");
-    producerConfig.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, clientTruststoreFile.getFile().getAbsolutePath());
-    producerConfig.put(SslConfigs.SSL_TRUSTSTORE_TYPE_CONFIG, "jks");
-    producerConfig.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, "123456");
-
+    producerConfig.put(SslConfigs.SSL_KEYSTORE_TYPE_CONFIG, "PEM");
+    producerConfig.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, keystoreLocation);
+    producerConfig.put(SslConfigs.SSL_KEY_PASSWORD_CONFIG, keystoreKeyPwd);
+    producerConfig.put(SslConfigs.SSL_TRUSTSTORE_TYPE_CONFIG, "PEM");
+    producerConfig.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, truststoreLocation);
     return producerConfig;
   }
 
@@ -63,21 +73,18 @@ public class KafkaConfig {
     return factory;
   }
 
-  private Map<String, Object> consumerConfig() throws IOException {
+  private Map<String, Object> consumerConfig() {
     Map<String, Object> consumerConfig = new HashMap<>(consumerFactory.getConfigurationProperties());
-    consumerConfig.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9093");
+    consumerConfig.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, producerBootstrapServer);
     consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
     consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
     consumerConfig.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SSL");
 
-    consumerConfig.put(SslConfigs.SSL_PROTOCOL_CONFIG, "TLSv1.2");
-    consumerConfig.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, clientKeystoreFile.getFile().getAbsolutePath());
-    consumerConfig.put(SslConfigs.SSL_KEYSTORE_TYPE_CONFIG, "jks");
-    consumerConfig.put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, "<password>");
-    consumerConfig.put(SslConfigs.SSL_KEY_PASSWORD_CONFIG, "<password>");
-    consumerConfig.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, clientTruststoreFile.getFile().getAbsolutePath());
-    consumerConfig.put(SslConfigs.SSL_TRUSTSTORE_TYPE_CONFIG, "jks");
-    consumerConfig.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, "<password>");
+    consumerConfig.put(SslConfigs.SSL_KEYSTORE_TYPE_CONFIG, "PEM");
+    consumerConfig.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, keystoreLocation);
+    consumerConfig.put(SslConfigs.SSL_KEY_PASSWORD_CONFIG, keystoreKeyPwd);
+    consumerConfig.put(SslConfigs.SSL_TRUSTSTORE_TYPE_CONFIG, "PEM");
+    consumerConfig.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, truststoreLocation);
     return consumerConfig;
   }
 

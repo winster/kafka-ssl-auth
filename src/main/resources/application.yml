@@ -1,6 +1,20 @@
 custom.ssl: true
+server.port: 8081
 spring:
   kafka:
     properties:
       #Server host name verification is disabled by setting ssl.endpoint.identification.algorithm to an empty string
       ssl.endpoint.identification.algorithm:
+kafka:
+  producer:
+    bootstrap-server: localhost:9093
+    topic: test
+  consumer:
+    bootstrap-server: localhost:9093
+    topic: test
+  ssl:
+    keystore:
+      location: <pem file with private key, certificate and certificate chain>
+      pwd: <private key password>
+    truststore:
+      location: <pem file with certificate chain>

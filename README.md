@@ -66,6 +66,12 @@ This application can be run in 2 modes.
 ## Code Review
 Review? DIY ;)
 
+## SSL Authentication at Kafka server
+1. Above producer and consumer config will help to authenticate the client
+2. There could be additional authorization such as
+* Kafka server wants to authorize the producer based on certificate subject' CommonName
+* Kafka server wants to authorize the consumer based on group-id.
+
 ### SSL Tips
 
 * [SSL gist](https://gist.github.com/winster/5d41ebe94eabc3195f56091730f01092)
